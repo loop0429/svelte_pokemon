@@ -1,7 +1,14 @@
 <script>
+import { createEventDispatcher } from 'svelte'
 import Icon from 'svelte-awesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { faQuestionCircle } from '@fortawesome/free-regular-svg-icons'
+
+const dispatch = createEventDispatcher()
+
+const handleClickModalButton = () => {
+  dispatch('modal')
+}
 </script>
 
 <header class="fixed w-full bg-white shadow-md z-10">
@@ -16,6 +23,7 @@ import { faQuestionCircle } from '@fortawesome/free-regular-svg-icons'
     <button
       class="btn-header"
       type="button"
+      on:click={handleClickModalButton}
     >
       <Icon data={faQuestionCircle} scale="2" />
     </button>
