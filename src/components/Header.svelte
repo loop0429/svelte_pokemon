@@ -9,6 +9,10 @@ const dispatch = createEventDispatcher()
 const handleClickModalButton = () => {
   dispatch('modal')
 }
+
+const handleClickSidebarButton = () => {
+  dispatch('sidebar')
+}
 </script>
 
 <header class="fixed w-full bg-white shadow-md z-10">
@@ -16,6 +20,7 @@ const handleClickModalButton = () => {
     <button
       class="btn-header"
       type="button"
+      on:click={handleClickSidebarButton}
     >
       <Icon data={faBars} scale="2" />
     </button>
