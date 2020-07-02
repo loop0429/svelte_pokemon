@@ -5,7 +5,8 @@
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public",
-    "sprite": "spritesmith"
+    "sprite": "spritesmith",
+    "lint": "eslint ./src"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
@@ -14,6 +15,15 @@
     "@fullhuman/postcss-purgecss": "^2.2.0",
     "@rollup/plugin-commonjs": "^12.0.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
+    "eslint": "^7.3.1",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-svelte3": "^2.7.3",
+    "husky": "3.0.9",
+    "lint-staged": "^10.2.11",
     "node-sass": "^4.14.1",
     "postcss": "^7.0.30",
     "postcss-load-config": "^2.1.0",
@@ -30,5 +40,15 @@
   },
   "dependencies": {
     "sirv-cli": "^0.4.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.svelte": [
+      "npm run lint"
+    ]
   }
 }
