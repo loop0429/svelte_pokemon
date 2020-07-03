@@ -35,7 +35,7 @@ const handleClickSidebarButton = () => {
   </div>
 </header>
 
-<style lang="scss">
+<style>
 .btn-header:focus {
   outline: none;
 }

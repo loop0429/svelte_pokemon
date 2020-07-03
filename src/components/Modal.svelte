@@ -11,7 +11,7 @@ export let isOpen
   </div>
 </div>
 
-<style lang="scss">
+<style>
 .modal {
   display: none;
   height: 100vh;
