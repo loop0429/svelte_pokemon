@@ -1,7 +1,22 @@
 <script>
+import { slide } from 'svelte/transition'
+
 import { TYPES } from '../constans/types'
+import { SERIES } from '../constans/series'
 
 export let isOpen
+
+let collapseTarget = ''
+const collapseParams = {
+  duration: 700
+}
+
+// Collapse
+const handleClickCollapse = (str) => {
+  // もし押下したコンテンツが現状開いてるなら閉じるために空文字を入れる
+  const target = str === collapseTarget ? '' : str
+  collapseTarget = target
+}
 </script>
 
 <div class="sidebar" class:is-open="{isOpen}">
@@ -21,30 +36,71 @@ export let isOpen
         <button
           class="block w-full p-2 bg-blue-600 text-white text-left btn-filter"
           type="button"
+          on:click={() => handleClickCollapse('types')}
         >
           タイプで絞り込み
         </button>
-        <ul class="filter-child__list">
-          {#each TYPES as item}
-          <li class="filter-child__item">
-            <button
-              class="relative w-full filter-child__btn"
-              type="button"
-            >
-              <div class="relative flex items-center p-2 z-10">
-                <img
-                  class="mr-1"
-                  src={`/img/icon/type-${item.en}.png`}
-                  width="15"
-                  alt=""
-                />
-                {item.ja}
-              </div>
-            </button>
-          </li>
-          {/each}
-        </ul>
+        {#if collapseTarget === 'types'}
+          <ul class="filter-child__list" transition:slide={collapseParams}>
+            {#each TYPES as item}
+            <li class="filter-child__item">
+              <button
+                class="relative w-full filter-child__btn"
+                type="button"
+              >
+                <div class="relative flex items-center p-2 z-10">
+                  <img
+                    class="mr-1"
+                    src={`/img/icon/type-${item.en}.png`}
+                    width="15"
+                    alt=""
+                  />
+                  {item.ja}
+                </div>
+              </button>
+            </li>
+            {/each}
+            <li>
+              <button
+                class="w-full p-2 bg-gray-200 text-left btn-clear-filter"
+                type="button"
+              >
+                選択をクリア
+              </button>
+            </li>
+          </ul>
+        {/if}
       </dd>
+      <dd class="text-sm">
+        <button
+          class="block w-full p-2 bg-blue-600 text-white text-left btn-filter"
+          type="button"
+          on:click={() => handleClickCollapse('series')}
+        >
+          シリーズで絞り込み
+        </button>
+        {#if collapseTarget === 'series'}
+          <ul class="filter-child__list" transition:slide={collapseParams}>
+            {#each SERIES as item}
+            <li class="filter-child__item">
+              <button
+                class="relative w-full filter-child__btn"
+                type="button"
+              >
+                <div class="relative flex items-center p-2 z-10">{item.area}</div>
+              </button>
+            </li>
+            {/each}
+            <li>
+              <button
+                class="w-full p-2 bg-gray-200 text-left btn-clear-filter"
+                type="button"
+              >
+                選択をクリア
+              </button>
+            </li>
+          </ul>
+        {/if}
     </dl>
   </div>
 </div>
