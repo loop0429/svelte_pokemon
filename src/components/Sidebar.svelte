@@ -28,6 +28,7 @@ const handleClickCollapse = (str) => {
   collapseTarget = target
 }
 
+// 絞り込みボタン押下時
 const handleFilterClick = (type, str = '') => {
   dispatch('filter', {
     type,

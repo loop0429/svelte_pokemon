@@ -10,6 +10,7 @@ export let weakResist
 
 const dispatch = createEventDispatcher()
 
+// 背景のoverlay押下時
 const handleOverlayClick = () => {
   dispatch('modal', {
     type: ''

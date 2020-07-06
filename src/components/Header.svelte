@@ -6,12 +6,14 @@ import { faQuestionCircle } from '@fortawesome/free-regular-svg-icons'
 
 const dispatch = createEventDispatcher()
 
+// 右上のフィーチャーボタン押下時
 const handleClickModalButton = () => {
   dispatch('modal', {
     type: 'feature'
   })
 }
 
+// 左上のメニューボタン押下時
 const handleClickSidebarButton = () => {
   dispatch('sidebar')
 }

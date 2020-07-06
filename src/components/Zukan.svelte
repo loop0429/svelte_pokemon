@@ -11,6 +11,7 @@ export let hasMore
 
 const dispatch = createEventDispatcher()
 
+// ポケモン押下時
 const handlePokemonClick = (id) => {
   dispatch('modal', {
     type: 'weakResist',
@@ -18,10 +19,12 @@ const handlePokemonClick = (id) => {
   })
 }
 
+// お気に入りボタン（ハート）押下時
 const handleFavoriteClick = (id) => {
   dispatch('favorite', { id })
 }
 
+// スクロール位置がページ最下部付近に到達した時
 const updatePage = () => {
   dispatch('more')
 }
@@ -44,7 +47,10 @@ const updatePage = () => {
             />
           </button>
         </div>
-        <div class="pb-1 sm:pb-2 cursor-pointer text-center zukan__btn" on:click={() => handlePokemonClick(item.id)}>
+        <div
+          class="pb-1 sm:pb-2 cursor-pointer text-center zukan__btn"
+          on:click={() => handlePokemonClick(item.id)}
+        >
           <div class={`mx-auto icon-${item.id}MS`} />
           <span class="inline-block text-xs">{`No.${item.id}`}</span>
           <ul class="inline-block">
