@@ -7,7 +7,9 @@ import { faQuestionCircle } from '@fortawesome/free-regular-svg-icons'
 const dispatch = createEventDispatcher()
 
 const handleClickModalButton = () => {
-  dispatch('modal')
+  dispatch('modal', {
+    type: 'feature'
+  })
 }
 
 const handleClickSidebarButton = () => {

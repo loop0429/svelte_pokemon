@@ -1,9 +1,19 @@
 <script>
+import { createEventDispatcher } from 'svelte'
 import Icon from 'svelte-awesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 // import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
 
 export let filterdZukan
+
+const dispatch = createEventDispatcher()
+
+const handlePokemonClick = (id) => {
+  dispatch('modal', {
+    type: 'weakResist',
+    id
+  })
+}
 </script>
 
 <div class="max-w-5xl mx-auto px-3 sm:px-0">
@@ -19,7 +29,7 @@ export let filterdZukan
             <Icon class="text-pink-400" data={faHeart} />
           </button>
         </div>
-        <div class="pb-1 sm:pb-2 cursor-pointer text-center zukan__btn">
+        <div class="pb-1 sm:pb-2 cursor-pointer text-center zukan__btn" on:click={() => handlePokemonClick(item.id)}>
           <div class={`mx-auto icon-${item.id}MS`} />
           <span class="inline-block text-xs">{`No.${item.id}`}</span>
           <ul class="inline-block">

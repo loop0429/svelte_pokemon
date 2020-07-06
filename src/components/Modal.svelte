@@ -1,13 +1,31 @@
 <script>
+import { createEventDispatcher } from 'svelte'
+
 import Feature from './modal/Feature.svelte'
+import WeakResist from './modal/WeakResist.svelte'
 
 export let isOpen
+export let modalType
+export let weakResist
+
+const dispatch = createEventDispatcher()
+
+const handleOverlayClick = () => {
+  dispatch('modal', {
+    type: ''
+  })
+}
 </script>
 
 <div class="modal" class:is-open="{isOpen}">
-  <div class="modal__overlay" />
+  <div class="modal__overlay" on:click={handleOverlayClick} />
   <div class="modal__content">
-    <Feature />
+    {#if modalType === 'feature'}
+      <Feature />
+    {/if}
+    {#if modalType === 'weakResist'}
+      <WeakResist weakResist={weakResist} />
+    {/if}
   </div>
 </div>
 
