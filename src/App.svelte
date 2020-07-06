@@ -27,45 +27,6 @@ const toggleModal = (e) => {
   weakResist = calcWeakRegist(payload.id)
 }
 
-const toggleSidebar = () => {
-  isOpenSidebar = !isOpenSidebar
-}
-
-// 絞り込み
-const toggleFilter = (e) => {
-  const payload = e.detail
-  const data = payload.data
-
-  // タイプで絞り込み
-  if (payload.type === 'type') {
-    selectedSeries = ''
-
-    // selectedTypesにすでに同一のtypeが含まれているなら、そのtypeを除外。そうでなければtypeを追加。
-    let types = selectedTypes.slice()
-    if (types.includes(data)) {
-      types = selectedTypes.filter(type => {
-        return type !== data
-      })
-    } else {
-      types.push(data)
-    }
-
-    selectedTypes = types
-  }
-
-  // シリーズで絞り込み
-  if (payload.type === 'series') {
-    selectedTypes = []
-    selectedSeries = data
-  }
-
-  // 選択をクリア
-  if (payload.type === 'clear') {
-    selectedTypes = []
-    selectedSeries = ''
-  }
-}
-
 // 弱点耐性の計算
 const calcWeakRegist = (id) => {
   // pokedexから該当のポケモンを取得
@@ -155,6 +116,45 @@ const calcWeakRegist = (id) => {
   })
 
   return payload
+}
+
+const toggleSidebar = () => {
+  isOpenSidebar = !isOpenSidebar
+}
+
+// 絞り込み
+const toggleFilter = (e) => {
+  const payload = e.detail
+  const data = payload.data
+
+  // タイプで絞り込み
+  if (payload.type === 'type') {
+    selectedSeries = ''
+
+    // selectedTypesにすでに同一のtypeが含まれているなら、そのtypeを除外。そうでなければtypeを追加。
+    let types = selectedTypes.slice()
+    if (types.includes(data)) {
+      types = selectedTypes.filter(type => {
+        return type !== data
+      })
+    } else {
+      types.push(data)
+    }
+
+    selectedTypes = types
+  }
+
+  // シリーズで絞り込み
+  if (payload.type === 'series') {
+    selectedTypes = []
+    selectedSeries = data
+  }
+
+  // 選択をクリア
+  if (payload.type === 'clear') {
+    selectedTypes = []
+    selectedSeries = ''
+  }
 }
 </script>
 
