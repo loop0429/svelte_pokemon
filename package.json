@@ -40,7 +40,8 @@
     "tailwindcss": "^1.4.6"
   },
   "dependencies": {
-    "sirv-cli": "^0.4.4"
+    "sirv-cli": "^0.4.4",
+    "svelte-infinite-scroll": "^1.4.0"
   },
   "husky": {
     "hooks": {

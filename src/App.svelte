@@ -17,10 +17,14 @@ let selectedTypes = []
 let selectedSeries = ''
 let filterdZukan = []
 let favoritesPokemon = []
+let rowZukan = pokedex
+let hasMore = true
+let page = 1
+const INCREASE = 35
 
 // init
 const init = () => {
-  filterdZukan = pokedex
+  filterdZukan = pokedex.slice(0, INCREASE)
   // ローカルストレーシのお気に入りポケモンidを取得
   if (JSON.parse(localStorage.getItem('pkmzfavorite'))) {
     favoritesPokemon = JSON.parse(localStorage.getItem('pkmzfavorite'))
@@ -159,6 +163,7 @@ const toggleSidebar = () => {
 const toggleFilter = (e) => {
   const payload = e.detail
   const data = payload.data
+  let list = []
 
   // タイプで絞り込み
   if (payload.type === 'type') {
@@ -177,7 +182,13 @@ const toggleFilter = (e) => {
     selectedTypes = types
 
     // typesが空でなければtypesから一致するポケモンデータを返してもらう。空ならpokedexの全データを使用する。
-    filterdZukan = types.length > 0 ? filteringTypes(types) : pokedex
+    rowZukan = types.length > 0 ? filteringTypes(types) : pokedex
+
+    // inifite scroll対応
+    list = checkFilteredData(rowZukan)
+
+    filterdZukan = list.zukan
+    hasMore = list.hasMore
   }
 
   // シリーズで絞り込み
@@ -185,7 +196,14 @@ const toggleFilter = (e) => {
     selectedTypes = []
     selectedSeries = data
 
-    filterdZukan = filteringSeries(selectedSeries)
+    // 選択したシリーズから一致するポケモンデータを返してもらう
+    rowZukan = filteringSeries(selectedSeries)
+
+    // inifite scroll対応
+    list = checkFilteredData(rowZukan)
+
+    filterdZukan = list.zukan
+    hasMore = list.hasMore
   }
 
   // お気に入りで絞り込み
@@ -193,17 +211,14 @@ const toggleFilter = (e) => {
     selectedTypes = []
     selectedSeries = data
 
-    const payload = []
+    // お気に入り登録されているidから一致するポケモンデータを返してもらう
+    rowZukan = filteringFavorites(favoritesPokemon)
 
-    favoritesPokemon.forEach(id => {
-      pokedex.forEach(pokemon => {
-        if (pokemon.id.includes(id)) {
-          payload.push(pokemon)
-        }
-      })
-    })
+    // inifite scroll対応
+    list = checkFilteredData(rowZukan)
 
-    filterdZukan = sortPokemonList(payload)
+    filterdZukan = list.zukan
+    hasMore = list.hasMore
   }
 
   // 選択をクリア
@@ -260,6 +275,53 @@ const filteringSeries = (data) => {
   // pokedexからstart〜endの配列を抜き取って返す
   return pokedex.slice(start, end)
 }
+
+// お気に入りidに一致するポケモンを抽出する
+const filteringFavorites = (data) => {
+  const payload = []
+
+  data.forEach((id) => {
+    pokedex.forEach((pokemon) => {
+      if (pokemon.id.includes(id)) {
+        payload.push(pokemon)
+      }
+    })
+  })
+
+  // id順にソートしたデータを返す
+  return sortPokemonList(payload)
+}
+
+// 絞り込みかけられたdataからinfiniteScroll稼働の可否を精査
+const checkFilteredData = (data) => {
+  const payload = {
+    hasMore: false,
+    zukan: data
+  }
+
+  // データ件数が35件超えてるかを判別
+  if (data.length > INCREASE) {
+    payload.hasMore = true
+    payload.zukan = data.slice(0, INCREASE)
+  }
+
+  return payload
+}
+
+// infiniteScroll
+const updatePage = () => {
+  page = page + 1
+  let end = page * INCREASE
+  hasMore = true
+
+  // rowZukanの件数を超えたら、infinite scrollを停止させる
+  if (end > rowZukan.length) {
+    end = rowZukan.length
+    hasMore = false
+  }
+
+  filterdZukan = rowZukan.slice(0, end)
+}
 </script>
 
 <Tailwindcss />
@@ -272,8 +334,10 @@ const filteringSeries = (data) => {
   <Zukan
     filterdZukan={filterdZukan}
     favoritesPokemon={favoritesPokemon}
+    hasMore={hasMore}
     on:modal={toggleModal}
     on:favorite={toggleFavorites}
+    on:more={updatePage}
   />
   <Sidebar
     isOpen={isOpenSidebar}

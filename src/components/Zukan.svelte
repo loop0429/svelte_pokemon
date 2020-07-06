@@ -3,9 +3,11 @@ import { createEventDispatcher } from 'svelte'
 import Icon from 'svelte-awesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
+import SvelteInfiniteScroll from 'svelte-infinite-scroll'
 
 export let filterdZukan
 export let favoritesPokemon
+export let hasMore
 
 const dispatch = createEventDispatcher()
 
@@ -19,9 +21,13 @@ const handlePokemonClick = (id) => {
 const handleFavoriteClick = (id) => {
   dispatch('favorite', { id })
 }
+
+const updatePage = () => {
+  dispatch('more')
+}
 </script>
 
-<div class="max-w-5xl mx-auto px-3 sm:px-0">
+<div class="max-w-5xl mx-auto px-3 sm:px-0 max-h-screen overflow-x-scroll">
   <ul class="flex flex-wrap justify-between sm:justify-start pt-20 sm:pt-24 zukan__list">
     {#each filterdZukan as item}
     <li class="mb-3 zukan__item">
@@ -55,6 +61,11 @@ const handleFavoriteClick = (id) => {
     </li>
     {/each}
   </ul>
+  <SvelteInfiniteScroll
+    threshold={250}
+    hasMore={hasMore}
+    on:loadMore={updatePage}
+  />
 </div>
 
 <style>
