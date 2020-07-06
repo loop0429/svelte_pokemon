@@ -188,10 +188,30 @@ const toggleFilter = (e) => {
     filterdZukan = filteringSeries(selectedSeries)
   }
 
+  // お気に入りで絞り込み
+  if (payload.type === 'favorite') {
+    selectedTypes = []
+    selectedSeries = data
+
+    const payload = []
+
+    favoritesPokemon.forEach(id => {
+      pokedex.forEach(pokemon => {
+        if (pokemon.id.includes(id)) {
+          payload.push(pokemon)
+        }
+      })
+    })
+
+    filterdZukan = sortPokemonList(payload)
+  }
+
   // 選択をクリア
   if (payload.type === 'clear') {
     selectedTypes = []
     selectedSeries = ''
+
+    filterdZukan = pokedex
   }
 }
 

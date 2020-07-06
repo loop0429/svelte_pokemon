@@ -45,6 +45,7 @@ const handleFilterClick = (type, str = '') => {
         <button
           class="block w-full p-2 bg-blue-600 text-white text-left btn-filter"
           type="button"
+          on:click={() => handleFilterClick('favorite')}
         >
           お気に入りポケモンで絞り込み
         </button>
