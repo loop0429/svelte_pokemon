@@ -27,7 +27,7 @@ const updatePage = () => {
 }
 </script>
 
-<div class="max-w-5xl mx-auto px-3 sm:px-0 wrapper">
+<div class="max-w-5xl mx-auto px-3 sm:px-0 max-h-screen overflow-x-scroll">
   <ul class="flex flex-wrap justify-between sm:justify-start pt-20 sm:pt-24 zukan__list">
     {#each filterdZukan as item}
     <li class="mb-3 zukan__item">
@@ -62,18 +62,13 @@ const updatePage = () => {
     {/each}
   </ul>
   <SvelteInfiniteScroll
-    threshold={100}
+    threshold={250}
     hasMore={hasMore}
     on:loadMore={updatePage}
   />
 </div>
 
 <style>
-.wrapper {
-  max-height: 500px;
-  overflow-x: scroll;
-}
-
 .zukan__item {
   width: 31%;
 }
