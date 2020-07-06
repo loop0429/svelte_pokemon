@@ -15,6 +15,10 @@ let modalType = ''
 let weakResist = {}
 let selectedTypes = []
 let selectedSeries = ''
+let filterdZukan = []
+
+// init
+filterdZukan = pokedex
 
 const toggleModal = (e) => {
   isOpenModal = !isOpenModal
@@ -142,6 +146,9 @@ const toggleFilter = (e) => {
     }
 
     selectedTypes = types
+
+    // typesが空でなければtypesから一致するポケモンデータを返してもらう。空ならpokedexの全データを使用する。
+    filterdZukan = types.length > 0 ? filteringTypes(types) : pokedex
   }
 
   // シリーズで絞り込み
@@ -156,6 +163,39 @@ const toggleFilter = (e) => {
     selectedSeries = ''
   }
 }
+
+// ポケモンをid順で並び替え
+const sortPokemonList = (list) => {
+  list.sort((a, b) => {
+    if (a.id > b.id) return 1
+    if (a.id < b.id) return -1
+    return 0
+  })
+
+  return list
+}
+
+// タイプに一致するポケモンを抽出する
+const filteringTypes = (data) => {
+  // タイプに一致するポケモンを配列に入れる
+  // 重複する可能性があるので、とりあえず仮データとして扱う
+  const dummyData = []
+  data.forEach(type => {
+    pokedex.forEach(pokemon => {
+      if (pokemon.type.includes(type)) {
+        dummyData.push(pokemon)
+      }
+    })
+  })
+
+  // 重複するデータを削除
+  const payload = dummyData.filter((value, index, self) => {
+    return self.indexOf(value) === index
+  })
+
+  // id順にソートしたデータを返す
+  return sortPokemonList(payload)
+}
 </script>
 
 <Tailwindcss />
@@ -165,7 +205,10 @@ const toggleFilter = (e) => {
     on:modal={toggleModal}
     on:sidebar={toggleSidebar}
   />
-  <Zukan filterdZukan={pokedex} on:modal={toggleModal} />
+  <Zukan
+    filterdZukan={filterdZukan}
+    on:modal={toggleModal}
+  />
   <Sidebar
     isOpen={isOpenSidebar}
     selectedTypes={selectedTypes}
