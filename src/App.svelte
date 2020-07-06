@@ -53,46 +53,46 @@ const toggleFavorites = (e) => {
   localStorage.setItem('pkmzfavorite', JSON.stringify(favoritesPokemon))
 }
 
+// モーダルの表示
 const toggleModal = (e) => {
   isOpenModal = !isOpenModal
 
-  const payload = e.detail
-  modalType = payload.type
+  const detail = e.detail
 
-  if (!payload.id) return
+  // モーダルに表示するコンテンツの出しわけ
+  modalType = detail.type
+
+  if (!detail.id) return
   // 弱点耐性のオブジェクトを作ってもらう
-  weakResist = calcWeakRegist(payload.id)
+  weakResist = calcWeakRegist(detail.id)
 }
 
 // 弱点耐性の計算
 const calcWeakRegist = (id) => {
   // pokedexから該当のポケモンを取得
-  const pokemonData = pokedex.find((pokemon) => {
-    return pokemon.id === id
-  })
-
-  const types = pokemonData.type
+  const targetPokemon = pokedex.find(pokemon => pokemon.id === id)
+  const types = targetPokemon.type
   const wsData = {}
 
   // タイプの数だけ回す
-  types.forEach((type) => {
+  types.forEach(type => {
     // weakResistDexから弱点・耐性のデータを取得
     const typeData = weakResistDex[type]
 
     // すでにwsDataに登録されていたら、登録されているものを±して計算
     // 弱点
-    typeData.weak.forEach((weak) => {
-      wsData[weak] = (wsData[weak]) ? wsData[weak] + 1 : 1
+    typeData.weak.forEach(weak => {
+      wsData[weak] = wsData[weak] ? wsData[weak] + 1 : 1
     })
 
     // 耐性
-    typeData.resistance.forEach((resist) => {
-      wsData[resist] = (wsData[resist]) ? wsData[resist] - 1 : -1
+    typeData.resistance.forEach(resist => {
+      wsData[resist] = wsData[resist] ? wsData[resist] - 1 : -1
     })
 
     // 無効※ポケGoでは二重耐性
-    typeData.no_effect.forEach((noEffect) => {
-      wsData[noEffect] = (wsData[noEffect]) ? wsData[noEffect] - 2 : -2
+    typeData.no_effect.forEach(noEffect => {
+      wsData[noEffect] = wsData[noEffect] ? wsData[noEffect] - 2 : -2
     })
   })
 
@@ -121,60 +121,65 @@ const calcWeakRegist = (id) => {
   }
 
   // wsDataに登録されてる内容から弱点耐性の振り分け
-  Object.keys(wsData).forEach((type) => {
+  Object.keys(wsData).forEach(type => {
     // タイプの画像ファイルと日本語名
     const data = {
       type: weakResistDex[type].ja,
       img: `/img/icon/type-${type}.png`
     }
 
+    let target = null
+
     switch (wsData[type]) {
       // 二重弱点
       case 2:
-        payload.weak2.types.push(data)
+        target = payload.weak2.types
         break
       // 弱点
       case 1:
-        payload.weak1.types.push(data)
+        target = payload.weak1.types
         break
       // 耐性
       case -1:
-        payload.resist1.types.push(data)
+        target = payload.resist1.types
         break
       // 二重耐性
       case -2:
-        payload.resist2.types.push(data)
+        target = payload.resist2.types
         break
       // 三重耐性
       case -3:
-        payload.resist3.types.push(data)
+        target = payload.resist3.types
         break
+    }
+
+    if (target) {
+      target.push(data)
     }
   })
 
   return payload
 }
 
+// サイドバーのトグル
 const toggleSidebar = () => {
   isOpenSidebar = !isOpenSidebar
 }
 
 // 絞り込み
 const toggleFilter = (e) => {
-  const payload = e.detail
-  const data = payload.data
-  let list = []
+  const detail = e.detail
+  const actionType = detail.type
+  const data = detail.data
 
   // タイプで絞り込み
-  if (payload.type === 'type') {
+  if (actionType === 'type') {
     selectedSeries = ''
 
     // selectedTypesにすでに同一のtypeが含まれているなら、そのtypeを除外。そうでなければtypeを追加。
     let types = selectedTypes.slice()
     if (types.includes(data)) {
-      types = selectedTypes.filter(type => {
-        return type !== data
-      })
+      types = selectedTypes.filter(type => type !== data)
     } else {
       types.push(data)
     }
@@ -183,51 +188,39 @@ const toggleFilter = (e) => {
 
     // typesが空でなければtypesから一致するポケモンデータを返してもらう。空ならpokedexの全データを使用する。
     rowZukan = types.length > 0 ? filteringTypes(types) : pokedex
-
-    // inifite scroll対応
-    list = checkFilteredData(rowZukan)
-
-    filterdZukan = list.zukan
-    hasMore = list.hasMore
   }
 
   // シリーズで絞り込み
-  if (payload.type === 'series') {
+  if (actionType === 'series') {
     selectedTypes = []
     selectedSeries = data
 
     // 選択したシリーズから一致するポケモンデータを返してもらう
     rowZukan = filteringSeries(selectedSeries)
-
-    // inifite scroll対応
-    list = checkFilteredData(rowZukan)
-
-    filterdZukan = list.zukan
-    hasMore = list.hasMore
   }
 
   // お気に入りで絞り込み
-  if (payload.type === 'favorite') {
+  if (actionType === 'favorite') {
     selectedTypes = []
     selectedSeries = data
 
     // お気に入り登録されているidから一致するポケモンデータを返してもらう
     rowZukan = filteringFavorites(favoritesPokemon)
-
-    // inifite scroll対応
-    list = checkFilteredData(rowZukan)
-
-    filterdZukan = list.zukan
-    hasMore = list.hasMore
   }
 
   // 選択をクリア
-  if (payload.type === 'clear') {
+  if (actionType === 'clear') {
     selectedTypes = []
     selectedSeries = ''
 
-    filterdZukan = pokedex
+    rowZukan = pokedex
   }
+
+  // inifite scroll対応
+  const payload = checkFilteredData(rowZukan)
+  page = 1
+  filterdZukan = payload.zukan
+  hasMore = payload.hasMore
 }
 
 // ポケモンをid順で並び替え
