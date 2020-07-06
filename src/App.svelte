@@ -13,6 +13,8 @@ let isOpenModal = false
 let isOpenSidebar = false
 let modalType = ''
 let weakResist = {}
+let selectedTypes = []
+let selectedSeries = ''
 
 const toggleModal = (e) => {
   isOpenModal = !isOpenModal
@@ -27,6 +29,41 @@ const toggleModal = (e) => {
 
 const toggleSidebar = () => {
   isOpenSidebar = !isOpenSidebar
+}
+
+// 絞り込み
+const toggleFilter = (e) => {
+  const payload = e.detail
+  const data = payload.data
+
+  // タイプで絞り込み
+  if (payload.type === 'type') {
+    selectedSeries = ''
+
+    // selectedTypesにすでに同一のtypeが含まれているなら、そのtypeを除外。そうでなければtypeを追加。
+    let types = selectedTypes.slice()
+    if (types.includes(data)) {
+      types = selectedTypes.filter(type => {
+        return type !== data
+      })
+    } else {
+      types.push(data)
+    }
+
+    selectedTypes = types
+  }
+
+  // シリーズで絞り込み
+  if (payload.type === 'series') {
+    selectedTypes = []
+    selectedSeries = data
+  }
+
+  // 選択をクリア
+  if (payload.type === 'clear') {
+    selectedTypes = []
+    selectedSeries = ''
+  }
 }
 
 // 弱点耐性の計算
@@ -129,7 +166,13 @@ const calcWeakRegist = (id) => {
     on:sidebar={toggleSidebar}
   />
   <Zukan filterdZukan={pokedex} on:modal={toggleModal} />
-  <Sidebar isOpen={isOpenSidebar} on:sidebar={toggleSidebar} />
+  <Sidebar
+    isOpen={isOpenSidebar}
+    selectedTypes={selectedTypes}
+    selectedSeries={selectedSeries}
+    on:sidebar={toggleSidebar}
+    on:filter={toggleFilter}
+  />
   <Modal
     isOpen={isOpenModal}
     modalType={modalType}

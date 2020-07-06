@@ -6,6 +6,8 @@ import { TYPES } from '../constans/types'
 import { SERIES } from '../constans/series'
 
 export let isOpen
+export let selectedTypes
+export let selectedSeries
 
 const dispatch = createEventDispatcher()
 
@@ -14,16 +16,23 @@ const handleOverlayClick = () => {
   dispatch('sidebar')
 }
 
+// Collapse
 let collapseTarget = ''
 const collapseParams = {
   duration: 700
 }
 
-// Collapse
 const handleClickCollapse = (str) => {
   // もし押下したコンテンツが現状開いてるなら閉じるために空文字を入れる
   const target = str === collapseTarget ? '' : str
   collapseTarget = target
+}
+
+const handleFilterClick = (type, str = '') => {
+  dispatch('filter', {
+    type,
+    data: str
+  })
 }
 </script>
 
@@ -54,7 +63,9 @@ const handleClickCollapse = (str) => {
             <li class="filter-child__item">
               <button
                 class="relative w-full filter-child__btn"
+                class:bg-gray-200={selectedTypes.includes(item.en)}
                 type="button"
+                on:click={() => handleFilterClick('type', item.en)}
               >
                 <div class="relative flex items-center p-2 z-10">
                   <img
@@ -72,6 +83,7 @@ const handleClickCollapse = (str) => {
               <button
                 class="w-full p-2 bg-gray-200 text-left btn-clear-filter"
                 type="button"
+                on:click={() => handleFilterClick('clear')}
               >
                 選択をクリア
               </button>
@@ -93,7 +105,9 @@ const handleClickCollapse = (str) => {
             <li class="filter-child__item">
               <button
                 class="relative w-full filter-child__btn"
+                class:bg-gray-200={selectedSeries === item.numbers}
                 type="button"
+                on:click={() => handleFilterClick('series', item.numbers)}
               >
                 <div class="relative flex items-center p-2 z-10">{item.area}</div>
               </button>
@@ -103,6 +117,7 @@ const handleClickCollapse = (str) => {
               <button
                 class="w-full p-2 bg-gray-200 text-left btn-clear-filter"
                 type="button"
+                on:click={() => handleFilterClick('clear')}
               >
                 選択をクリア
               </button>
