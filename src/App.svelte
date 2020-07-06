@@ -129,7 +129,7 @@ const calcWeakRegist = (id) => {
     on:sidebar={toggleSidebar}
   />
   <Zukan filterdZukan={pokedex} on:modal={toggleModal} />
-  <Sidebar isOpen={isOpenSidebar} />
+  <Sidebar isOpen={isOpenSidebar} on:sidebar={toggleSidebar} />
   <Modal
     isOpen={isOpenModal}
     modalType={modalType}

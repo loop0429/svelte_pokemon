@@ -1,10 +1,18 @@
 <script>
+import { createEventDispatcher } from 'svelte'
 import { slide } from 'svelte/transition'
 
 import { TYPES } from '../constans/types'
 import { SERIES } from '../constans/series'
 
 export let isOpen
+
+const dispatch = createEventDispatcher()
+
+// サイドバーを閉じる
+const handleOverlayClick = () => {
+  dispatch('sidebar')
+}
 
 let collapseTarget = ''
 const collapseParams = {
@@ -20,7 +28,7 @@ const handleClickCollapse = (str) => {
 </script>
 
 <div class="sidebar" class:is-open="{isOpen}">
-  <div class="sidebar__overlay" />
+  <div class="sidebar__overlay" on:click={handleOverlayClick} />
   <div class="sidebar__wrapper">
     <dl class="m-0">
       <dt class="p-2 bg-gray-200">絞り込み検索</dt>
