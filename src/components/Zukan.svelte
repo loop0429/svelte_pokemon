@@ -62,7 +62,6 @@ const updatePage = () => {
     {/each}
   </ul>
   <SvelteInfiniteScroll
-    threshold={250}
     hasMore={hasMore}
     on:loadMore={updatePage}
   />
