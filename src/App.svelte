@@ -155,6 +155,8 @@ const toggleFilter = (e) => {
   if (payload.type === 'series') {
     selectedTypes = []
     selectedSeries = data
+
+    filterdZukan = filteringSeries(selectedSeries)
   }
 
   // 選択をクリア
@@ -195,6 +197,19 @@ const filteringTypes = (data) => {
 
   // id順にソートしたデータを返す
   return sortPokemonList(payload)
+}
+
+// シリーズに一致するポケモンを抽出する
+const filteringSeries = (data) => {
+  // dataは'1-151'のような形式で渡ってくるので、'-'で区切る
+  const splitId = data.split('-')
+
+  // splitId[0]を開始点、splitId[1]を終了点とする
+  const start = Number(splitId[0]) - 1
+  const end = Number(splitId[1])
+
+  // pokedexからstart〜endの配列を抜き取って返す
+  return pokedex.slice(start, end)
 }
 </script>
 
