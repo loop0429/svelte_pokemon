@@ -2,9 +2,10 @@
 import { createEventDispatcher } from 'svelte'
 import Icon from 'svelte-awesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
-// import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
 
 export let filterdZukan
+export let favoritesPokemon
 
 const dispatch = createEventDispatcher()
 
@@ -13,6 +14,10 @@ const handlePokemonClick = (id) => {
     type: 'weakResist',
     id
   })
+}
+
+const handleFavoriteClick = (id) => {
+  dispatch('favorite', { id })
 }
 </script>
 
@@ -25,8 +30,12 @@ const handlePokemonClick = (id) => {
           <button
             class="leading-none btn-favorite"
             type="button"
+            on:click={() => handleFavoriteClick(item.id)}
           >
-            <Icon class="text-pink-400" data={faHeart} />
+            <Icon
+              class="text-pink-400"
+              data={favoritesPokemon.includes(item.id) ? faHeart : farHeart}
+            />
           </button>
         </div>
         <div class="pb-1 sm:pb-2 cursor-pointer text-center zukan__btn" on:click={() => handlePokemonClick(item.id)}>

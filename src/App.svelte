@@ -16,9 +16,38 @@ let weakResist = {}
 let selectedTypes = []
 let selectedSeries = ''
 let filterdZukan = []
+let favoritesPokemon = []
 
 // init
-filterdZukan = pokedex
+const init = () => {
+  filterdZukan = pokedex
+  // ローカルストレーシのお気に入りポケモンidを取得
+  if (JSON.parse(localStorage.getItem('pkmzfavorite'))) {
+    favoritesPokemon = JSON.parse(localStorage.getItem('pkmzfavorite'))
+  }
+}
+
+init()
+
+// お気に入り追加
+const toggleFavorites = (e) => {
+  const id = e.detail.id
+  let favorites = favoritesPokemon.slice()
+
+  // favoritesPokemonにすでに同一のidが含まれているなら、そのidを除外。そうでなければidを追加。
+  if (favorites.includes(id)) {
+    favorites = favoritesPokemon.filter(pokemon => {
+      return pokemon !== id
+    })
+  } else {
+    favorites.push(id)
+  }
+
+  favoritesPokemon = favorites
+
+  // ローカルストレージのお気に入りリストを更新
+  localStorage.setItem('pkmzfavorite', JSON.stringify(favoritesPokemon))
+}
 
 const toggleModal = (e) => {
   isOpenModal = !isOpenModal
@@ -222,7 +251,9 @@ const filteringSeries = (data) => {
   />
   <Zukan
     filterdZukan={filterdZukan}
+    favoritesPokemon={favoritesPokemon}
     on:modal={toggleModal}
+    on:favorite={toggleFavorites}
   />
   <Sidebar
     isOpen={isOpenSidebar}
