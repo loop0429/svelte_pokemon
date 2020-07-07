@@ -248,9 +248,8 @@ const filteringTypes = (data) => {
   })
 
   // 重複するデータを削除
-  const payload = dummyData.filter((value, index, self) => {
-    return self.indexOf(value) === index
-  })
+  const payload = dummyData.filter((value, index, self) =>
+    self.indexOf(value) === index)
 
   // id順にソートしたデータを返す
   return sortPokemonList(payload)
@@ -273,8 +272,8 @@ const filteringSeries = (data) => {
 const filteringFavorites = (data) => {
   const payload = []
 
-  data.forEach((id) => {
-    pokedex.forEach((pokemon) => {
+  data.forEach(id => {
+    pokedex.forEach(pokemon => {
       if (pokemon.id.includes(id)) {
         payload.push(pokemon)
       }
