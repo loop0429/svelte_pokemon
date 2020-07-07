@@ -16,21 +16,18 @@ const sortPokemonList = (list) => {
 export const filteringTypes = (data) => {
   // タイプに一致するポケモンを配列に入れる
   // 重複する可能性があるので、とりあえず仮データとして扱う
-  const dummyData = []
-  data.forEach(type => {
-    pokedex.forEach(pokemon => {
-      if (pokemon.type.includes(type)) {
-        dummyData.push(pokemon)
+  const ids = []
+  const payload = pokedex.reduce((acc, value) => {
+    data.forEach(type => {
+      if (value.type.includes(type) && !ids.includes(value.id)) {
+        ids.push(value.id)
+        acc.push(value)
       }
     })
-  })
+    return acc
+  }, [])
 
-  // 重複するデータを削除
-  const payload = dummyData.filter((value, index, self) =>
-    self.indexOf(value) === index)
-
-  // id順にソートしたデータを返す
-  return sortPokemonList(payload)
+  return payload
 }
 
 // シリーズに一致するポケモンを抽出する
