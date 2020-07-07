@@ -210,6 +210,12 @@ const toggleFilter = (e) => {
     selectedTypes = []
     selectedSeries = data
 
+    // お気に入りのポケモンがいなければ
+    if (!favoritesPokemon.length) {
+      alert('お気に入りのポケモンがいません')
+      return
+    }
+
     // お気に入り登録されているidから一致するポケモンデータを返してもらう
     rowZukan = filteringFavorites(favoritesPokemon)
   }
