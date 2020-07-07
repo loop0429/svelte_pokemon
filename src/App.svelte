@@ -15,16 +15,18 @@ let modalType = ''
 let weakResist = {}
 let selectedTypes = []
 let selectedSeries = ''
-let filterdZukan = []
 let favoritesPokemon = []
 let rowZukan = pokedex
-let hasMore = true
+let filterdZukan = []
 let page = 1
+let hasMore = true
+
 const INCREASE = 35
 
 // init
 const init = () => {
   filterdZukan = pokedex.slice(0, INCREASE)
+
   // ローカルストレーシのお気に入りポケモンidを取得
   if (JSON.parse(localStorage.getItem('pkmzfavorite'))) {
     favoritesPokemon = JSON.parse(localStorage.getItem('pkmzfavorite'))
@@ -151,6 +153,8 @@ const calcWeakRegist = (id) => {
       case -3:
         target = payload.resist3.types
         break
+      default:
+        break
     }
 
     if (target) {
@@ -211,7 +215,7 @@ const toggleFilter = (e) => {
   // 選択をクリア
   if (actionType === 'clear') {
     selectedTypes = []
-    selectedSeries = ''
+    selectedSeries = data
 
     rowZukan = pokedex
   }
@@ -318,7 +322,7 @@ const updatePage = () => {
 
 <Tailwindcss />
 
-<div>
+<div class="bg-white">
   <Header
     on:modal={toggleModal}
     on:sidebar={toggleSidebar}
