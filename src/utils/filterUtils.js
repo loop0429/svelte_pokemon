@@ -48,15 +48,7 @@ export const filteringSeries = (data) => {
 
 // お気に入りidに一致するポケモンを抽出する
 export const filteringFavorites = (data) => {
-  const payload = []
-
-  data.forEach(id => {
-    pokedex.forEach(pokemon => {
-      if (pokemon.id.includes(id)) {
-        payload.push(pokemon)
-      }
-    })
-  })
+  const payload = pokedex.filter(pokemon => data.includes(pokemon.id))
 
   // id順にソートしたデータを返す
   return sortPokemonList(payload)
