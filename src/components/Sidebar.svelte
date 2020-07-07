@@ -22,17 +22,17 @@ const collapseParams = {
   duration: 700
 }
 
-const handleClickCollapse = (str) => {
+const handleClickCollapse = (data) => {
   // もし押下したコンテンツが現状開いてるなら閉じるために空文字を入れる
-  const target = str === collapseTarget ? '' : str
+  const target = data === collapseTarget ? '' : data
   collapseTarget = target
 }
 
 // 絞り込みボタン押下時
-const handleFilterClick = (type, str = '') => {
+const handleFilterClick = (type, data = '') => {
   dispatch('filter', {
     type,
-    data: str
+    data
   })
 }
 </script>

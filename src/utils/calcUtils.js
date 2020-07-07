@@ -85,6 +85,8 @@ export const calcWeakRegist = (id) => {
       case -3:
         target = payload.resist3.types
         break
+      default:
+        break
     }
 
     if (target) {

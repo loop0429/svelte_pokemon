@@ -48,9 +48,7 @@ const toggleFavorites = (e) => {
 
   // favoritesPokemonにすでに同一のidが含まれているなら、そのidを除外。そうでなければidを追加。
   if (favorites.includes(id)) {
-    favorites = favoritesPokemon.filter(pokemon => {
-      return pokemon !== id
-    })
+    favorites = favoritesPokemon.filter(pokemon => pokemon !== id)
   } else {
     favorites.push(id)
   }
