@@ -16,7 +16,7 @@
   <dd class="feature__dd">選択されたシリーズのポケモンのみに絞り込み表示します。※複数選択は不可。</dd>
 </dl>
 
-<style lang="scss">
+<style>
 .feature__title {
   font-size: 1.25rem;
   font-weight: 700;
