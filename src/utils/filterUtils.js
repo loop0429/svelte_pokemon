@@ -15,7 +15,6 @@ const sortPokemonList = (list) => {
 // タイプに一致するポケモンを抽出する
 export const filteringTypes = (data) => {
   // タイプに一致するポケモンを配列に入れる
-  // 重複する可能性があるので、とりあえず仮データとして扱う
   const ids = []
   const payload = pokedex.reduce((acc, value) => {
     data.forEach(type => {
