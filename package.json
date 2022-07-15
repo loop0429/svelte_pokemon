@@ -34,7 +34,7 @@
     "rollup-plugin-terser": "^5.1.2",
     "sass": "^1.26.7",
     "spritesmith-cli": "^1.1.2",
-    "svelte": "^3.0.0",
+    "svelte": "^3.49.0",
     "svelte-awesome": "^2.3.0",
     "svelte-preprocess": "^3.7.4",
     "tailwindcss": "^1.4.6"
